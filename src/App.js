@@ -1,5 +1,6 @@
 import React, { Component }from 'react';
-import Loader from './Loader/Loader'
+import Loader from './Loader/Loader';
+import Table from './Table/Table'
 import './App.css';
 
 class App extends Component {
@@ -10,6 +11,8 @@ class App extends Component {
       items: [],
       error: null
     }
+
+    this.sortFunc = this.sortFunc.bind(this)
   }
   componentDidMount() {
     fetch("http://www.filltext.com/?rows=32&id={number|1000}&firstName={firstName}&lastName={lastName}&email={email}&phone={phone|(xxx)xxx-xx-xx}&address={addressObject}&description={lorem|32}")
@@ -29,8 +32,17 @@ class App extends Component {
         }
     )
   }
+
+  sortFunc = namecolumn => {
+    this.setState({
+      items: this.state.items.sort((a, b) => (
+        parseFloat(a[namecolumn]) - parseFloat(b[namecolumn])
+      ))
+    })
+  }
+
   render() {
-    const {error, isLoaded, items} = this.state;
+    const {error, isLoaded} = this.state;
         if (error) {
             return <p>Error {error.message}</p>
         } else if (!isLoaded) {
@@ -38,13 +50,7 @@ class App extends Component {
         } else {
             return(
                 <div className="wrapper">
-                  <ul>
-                      {items.map(item => (
-                          <li key={item.id}>
-                              {item.firstName}
-                          </li>
-                      ))}
-                  </ul>
+                  <Table data={this.state.items} sortFunc={this.sortFunc} />
                 </div>
             )
         }

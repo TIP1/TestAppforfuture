@@ -1,0 +1,11 @@
+textarea {
+    resize: none;
+    border: 0;
+    
+}
+
+.info {
+    border: 2px solid black;
+    padding: 10px;
+    background: rgb(245, 241, 241);
+}

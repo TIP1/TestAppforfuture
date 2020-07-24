@@ -1,0 +1,19 @@
+th p{
+   float: right;
+   margin: 0;
+   width: 0;
+}
+
+thead th {
+    user-select: none;
+}
+
+tr {
+    cursor: pointer;
+}
+
+tbody tr:hover {
+    background: rgb(187, 187, 187);
+    transition: background .500ms linear;
+    cursor: pointer;
+}

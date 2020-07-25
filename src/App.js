@@ -1,6 +1,8 @@
 import React, { Component }from 'react';
+import ReactPaginate from 'react-paginate';
 import lodash from 'lodash';
 import Loader from './Loader/Loader';
+import TableSearch from './TableSearch/TableSearch';
 import Table from './Table/Table';
 import AboutEl from './AboutEl/AboutEl';
 import ModeSelector from './ModeSelector/ModeSelector';
@@ -14,9 +16,11 @@ class App extends Component {
       isLoaded: false,
       items: [],
       error: null,
+      search: '',
       sort: 'asc',
       namecolumn: 'id',
-      el: null
+      el: null,
+      page: 0
     }
 
   }
@@ -55,15 +59,41 @@ class App extends Component {
     this.setState({el})
   }
 
+  handlePageClick = ({selected}) => {
+    this.setState({page: selected})
+  }
+
   onSelectMode = url => {
     this.setState({
       isModeSelected: true,
     });
-
+    
     this.getData(url)
   }
 
+  searchHandler = search => {
+    this.setState({search, page: 0})
+  }
+
+  getFilteredData() {
+    const {items, search}= this.state
+    const isnum = /^\d+$/.test(search)
+    if(!search) {
+      return items
+    } else if(isnum){
+      return items.filter(item => {
+        return item['id'].includes(`${search}`)
+      })
+    } else {
+    return items.filter(item => {
+      return item['firstName'].toLowerCase().includes(search.toLowerCase())})
+    }
+  }
   render() {
+    const pageSize = 50;
+    const filtered = this.getFilteredData();
+    const displayData = lodash.chunk(filtered, pageSize)[this.state.page];
+
     if (!this.state.isModeSelected) {
       return (    
             <ModeSelector onSelect={this.onSelectMode}/>        
@@ -77,13 +107,35 @@ class App extends Component {
         } else {
             return(
                 <div className="wrapper">
+                  <TableSearch onSearch={this.searchHandler}/>
                   <Table
-                   data={this.state.items}
+                   data={displayData}
                    sortFunc={this.sortFunc}
                    sort={this.state.sort}
                    namecolumn={this.state.namecolumn}
                    showRow={this.showRow}
                   />
+                  {this.state.items.length > pageSize ? 
+                    <ReactPaginate
+                      previousLabel={'previous'}
+                      nextLabel={'next'}
+                      breakLabel={'...'}
+                      breakClassName={'break-me'}
+                      pageCount={this.state.items.length%50 === 0 ? this.state.items.length/50 : this.state.items.length/50 + 1}
+                      marginPagesDisplayed={2}
+                      pageRangeDisplayed={5}
+                      onPageChange={this.handlePageClick}
+                      containerClassName={'pagination'}
+                      activeClassName={'active'}
+                      pageClassName={'page-item'}
+                      pageLinkClassName={'page-link'}
+                      previousClassName={'page-item'}
+                      nextClassName={'page-item'}
+                      previousLinkClassName={'page-link'}
+                      nextLinkClassName={'page-link'}
+                      forcePage={this.state.page}
+                    />  : null
+                  }
                   {
                   this.state.el ? <AboutEl datarow={this.state.el} /> : null
                   }

@@ -77,16 +77,21 @@ class App extends Component {
 
   getFilteredData() {
     const {items, search}= this.state
-    
+    var isnum = /^\d+$/.test(search);
     if(!search) {
       return items
-    } else if (search)
+    } else if (!isnum) {
     return items.filter(item => {
       return item['firstName'].toLowerCase().includes(search.toLowerCase()) ||
              item['lastName'].toLowerCase().includes(search.toLowerCase()) ||
-             item['email'].toLowerCase().includes(search.toLowerCase())
-             
-      })
+             item['email'].toLowerCase().includes(search.toLowerCase())             
+          }) 
+      } else if (isnum) {
+          return items.filter(item => {
+            return item['id'].toString().includes(search) ||
+                   item['phone'].toString().includes(search)
+          })
+        }
   }
   render() {
     const pageSize = 50;

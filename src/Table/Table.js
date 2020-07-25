@@ -3,6 +3,7 @@ import './Table.css'
 export default function Table(props) {
     return (
         <div>
+            { props.data ? 
             <table className="table">
                 <thead>
                 <tr>
@@ -29,6 +30,7 @@ export default function Table(props) {
                 </tr>
                 </thead>
                 <tbody>
+                    
                     {   
                         props.data.map(item => (
                             <tr key={item.id + item.phone} onClick={props.showRow.bind(null, item)}>
@@ -40,8 +42,8 @@ export default function Table(props) {
                             </tr>
                         ))
                     }
-                </tbody>
-            </table>
+                </tbody> 
+                </table> : <p className="nores">no results</p>  }
         </div>
     )
 }

@@ -12,7 +12,7 @@ export default function TableSearch(props) {
             <div className="input-group mb-3">
                 <input 
                     type="text" 
-                    class="form-control" 
+                    className="form-control" 
                     value={value} 
                     onChange={valueChangeHandler} />
                 <div className="input-group-append">

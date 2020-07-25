@@ -77,21 +77,21 @@ class App extends Component {
 
   getFilteredData() {
     const {items, search}= this.state
-    const isnum = /^\d+$/.test(search)
+    
     if(!search) {
       return items
-    } else if(isnum){
-      return items.filter(item => {
-        return item['id'].includes(`${search}`)
-      })
-    } else {
+    } else if (search)
     return items.filter(item => {
-      return item['firstName'].toLowerCase().includes(search.toLowerCase())})
-    }
+      return item['firstName'].toLowerCase().includes(search.toLowerCase()) ||
+             item['lastName'].toLowerCase().includes(search.toLowerCase()) ||
+             item['email'].toLowerCase().includes(search.toLowerCase())
+             
+      })
   }
   render() {
     const pageSize = 50;
     const filtered = this.getFilteredData();
+    const CountOfPage = Math.ceil(filtered.length/pageSize);
     const displayData = lodash.chunk(filtered, pageSize)[this.state.page];
 
     if (!this.state.isModeSelected) {
@@ -121,7 +121,7 @@ class App extends Component {
                       nextLabel={'next'}
                       breakLabel={'...'}
                       breakClassName={'break-me'}
-                      pageCount={this.state.items.length%50 === 0 ? this.state.items.length/50 : this.state.items.length/50 + 1}
+                      pageCount={CountOfPage}
                       marginPagesDisplayed={2}
                       pageRangeDisplayed={5}
                       onPageChange={this.handlePageClick}

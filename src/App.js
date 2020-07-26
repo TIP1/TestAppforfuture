@@ -84,8 +84,9 @@ class App extends Component {
     });
   };
 
-  addElFunc = e => {
-    console.log (e.target.value);
+  addElFunc = obct => {
+    this.state.items.unshift (obct);
+    this.setState ({items: this.state.items});
   };
 
   getFilteredData () {
@@ -127,12 +128,14 @@ class App extends Component {
     } else {
       return (
         <div className="wrapper">
-          <button className="btn btn-primary" onClick={this.showAddEl}>
-            Add element
+        <div className="addElementHead">
+          <button className="btn btn-primary" id="add" onClick={this.showAddEl}>
+            Add element +
           </button>
           {this.state.addElement
-            ? <AddElementForm handleChange={this.addElFunc} />
+            ? <AddElementForm handleSubmit={this.addElFunc} />
             : null}
+            </div>
           <TableSearch onSearch={this.searchHandler} />
           <Table
             data={displayData}

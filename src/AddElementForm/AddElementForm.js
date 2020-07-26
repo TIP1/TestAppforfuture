@@ -21,11 +21,26 @@ class AddElementForm extends Component {
     };
   }
 
+
   wrapSend = event => {
     event.preventDefault ();
     this.props.handleSubmit (this.state);
     document.forms['addEl'].reset ();
-    this.setState({validation: false})
+    this.setState({
+      id: '',
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      address: {
+        streetAddress: 'has not',
+        city: 'has not',
+        state: 'has not',
+        zip: 'has not',
+      },
+      description: 'has not',
+      validation: false,
+    })
   };
 
   handleChange = e => {
@@ -115,8 +130,8 @@ class AddElementForm extends Component {
             className="paramEl"
           />
           {this.state.validation
-            ? <button type="submit" class="btn btn-success subm" onClick={this.reqСond}>Submit</button>
-            : <button type="submit" class="btn btn-light subm" onClick={this.reqСond} disabled>
+            ? <button type="submit" className="btn btn-success subm" onClick={this.reqСond}>Submit</button>
+            : <button type="submit" className="btn btn-light subm" onClick={this.reqСond} disabled>
                 Submit
               </button>}
         </form>
